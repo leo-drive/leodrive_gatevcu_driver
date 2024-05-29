@@ -6,14 +6,14 @@ namespace leodrive_gatevcu_joy
 {
 
 enum gamepad_axis {
-  LEFT_JOYSTICK_HORIZONTAL,
-  LEFT_JOYSTICK_VERTICAL,
-  LEFT_TRIGGER,
-  RIGHT_JOYSTICK_HORIZONTAL,
-  RIGHT_JOYSTICK_VERTICAL,
-  RIGHT_TRIGGER,
-  DPAD_HORIZONTAL,
-  DPAD_VERTICAL
+  LEFT_JOYSTICK_HORIZONTAL, // Steering
+  LEFT_JOYSTICK_VERTICAL, // Empty
+  RIGHT_TRIGGER, // Gas
+  LEFT_TRIGGER, // Brake
+  RIGHT_JOYSTICK_HORIZONTAL, // Empty
+  RIGHT_JOYSTICK_VERTICAL, // Empty
+  DPAD_HORIZONTAL, // Empty
+  DPAD_VERTICAL // Gear
 };
 
 static std::string axis_to_string(gamepad_axis axis)

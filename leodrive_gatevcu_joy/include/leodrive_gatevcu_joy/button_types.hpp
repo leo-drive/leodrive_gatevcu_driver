@@ -7,18 +7,19 @@ namespace leodrive_gatevcu_joy
 
 enum gamepad_button {
   X_BUTTON,
+  SQUARE_BUTTON,
   CIRCLE_BUTTON,
   TRIANGLE_BUTTON,
-  SQUARE_BUTTON,
-  LEFT_BUTTON,
-  RIGHT_BUTTON,
-  LEFT_TRIGGER_BUTTON,
-  RIGHT_TRIGGER_BUTTON,
+  RIGHT_BUTTON, // R1 - Gear Up
+  LEFT_BUTTON, // L1 - Gear Down
+  RIGHT_TRIGGER_BUTTON, // R2
+  LEFT_TRIGGER_BUTTON, // L2
   SHARE_BUTTON,
   OPTIONS_BUTTON,
   PS4_BUTTON,
   LEFT_JOYSTICK_BUTTON,
-  RIGHT_JOYSTICK_BUTTON
+  RIGHT_JOYSTICK_BUTTON,
+  ENTER_BUTTON
 };
 
 enum gamepad_axes_button { UP_BUTTON, DOWN_BUTTON };
@@ -52,6 +53,8 @@ inline std::string button_to_string(gamepad_button button)
       return "Left Joystick Button";
     case RIGHT_JOYSTICK_BUTTON:
       return "Right Joystick Button";
+    case ENTER_BUTTON:
+      return "Enter Button";
     default:
       return "Unknown Button";
   }

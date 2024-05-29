@@ -93,7 +93,25 @@ void VcuJoyHandler::register_buttons()
   handbrake.on_hold([this]() { vehicle_msg_.hand_brake = VehicleMsg::HANDBRAKE_RELEASE; });
   button_handler_.add_button(handbrake);
 
-  Button left_blinker{gamepad_button::LEFT_BUTTON};
+  Button gear_up{gamepad_button::RIGHT_BUTTON};
+  gear_up.set_log_fields("gear change", &vehicle_msg_.gear);
+  gear_up.on_click([this]() {
+      if (vehicle_msg_.gear > 2) {
+          --vehicle_msg_.gear;
+      }
+  });
+  button_handler_.add_button(gear_up);
+
+  Button gear_down{gamepad_button::LEFT_BUTTON};
+  gear_down.set_log_fields("gear change", &vehicle_msg_.gear);
+  gear_down.on_click([this]() {
+      if (vehicle_msg_.gear < 4) {
+          ++vehicle_msg_.gear;
+      }
+  });
+  button_handler_.add_button(gear_down);
+
+  Button left_blinker{gamepad_button::LEFT_TRIGGER_BUTTON};
   left_blinker.set_log_fields("left blinker", &vehicle_msg_.blinker);
   left_blinker.on_click([this]() {
     if (vehicle_msg_.blinker == VehicleMsg::BLINKER_LEFT)
@@ -104,7 +122,7 @@ void VcuJoyHandler::register_buttons()
   });
   button_handler_.add_button(left_blinker);
 
-  Button right_blinker{gamepad_button::RIGHT_BUTTON};
+  Button right_blinker{gamepad_button::RIGHT_TRIGGER_BUTTON};
   right_blinker.set_log_fields("right blinker", &vehicle_msg_.blinker);
   right_blinker.on_click([this]() {
     if (vehicle_msg_.blinker == VehicleMsg::BLINKER_RIGHT)
@@ -126,24 +144,6 @@ void VcuJoyHandler::register_buttons()
   });
   button_handler_.add_button(hazard_blinker);
 
-  Button gear_up{gamepad_axes_button::UP_BUTTON};
-  gear_up.set_log_fields("gear change", &vehicle_msg_.gear);
-  gear_up.on_click([this]() {
-    if (vehicle_msg_.gear > 2) {
-      --vehicle_msg_.gear;
-    }
-  });
-  button_handler_.add_button(gear_up);
-
-  Button gear_down{gamepad_axes_button::DOWN_BUTTON};
-  gear_down.set_log_fields("gear change", &vehicle_msg_.gear);
-  gear_down.on_click([this]() {
-    if (vehicle_msg_.gear < 4) {
-      ++vehicle_msg_.gear;
-    }
-  });
-  button_handler_.add_button(gear_down);
-
   Button gear_park{gamepad_button::SHARE_BUTTON};
   gear_park.set_log_fields("gear park", &vehicle_msg_.gear);
   gear_park.on_click([this]() { vehicle_msg_.gear = 1; });
@@ -156,14 +156,14 @@ void VcuJoyHandler::register_axes()
   gas_pedal.set_log_fields("gas pedal", &longitudinal_msg_.gas_pedal);
   gas_pedal.on_update([this](const float & joy_input) {
     longitudinal_msg_.gas_pedal =
-      mapOneRangeToAnother(joy_input, 1.0, -1.0, 0.0, params_.max_gas_pedal_pos, 2);
+      mapOneRangeToAnother(joy_input, -1.0, 1.0, 0.0, params_.max_gas_pedal_pos, 2);
   });
   axis_handler_.add_axis(gas_pedal);
 
   Axis brake_pedal{gamepad_axis::LEFT_TRIGGER};
   brake_pedal.set_log_fields("brake pedal", &longitudinal_msg_.brake_pedal);
   brake_pedal.on_update([this](const float & joy_input) {
-    const auto shifted = (joy_input * -1) + 1;
+    const auto shifted = (joy_input * 1) + 1;
     const auto mapped_gas_pedal_pos = 56.371 * std::pow(shifted, 6) + 243.63 * shifted;
     longitudinal_msg_.brake_pedal = static_cast<uint16_t>(mapped_gas_pedal_pos);
   });
